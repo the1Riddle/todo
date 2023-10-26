@@ -1,8 +1,24 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // Props destructuring
 const TodoForm = ({ handleClick }) => {
 	const [input, setInput] = useState('');
+
+	// Runs every time the component rerenders
+	// useEffect(() => {
+	// 	console.log('Executing');
+	// });
+
+	// Runs only once when the component loads/renders
+	// useEffect(() => {
+	// 	console.log('Runs only once');
+	// }, []);
+
+	// Runs once on component load and every time the dependancy changes
+	// useEffect(() => {
+	// 	document.title = input;
+	// 	console.log('Runs every time the input changes');
+	// }, [input]);
 
 	return (
 		<>
