@@ -5,21 +5,46 @@ function App() {
 	const [todos, setTodos] = useState([]);
 	const [dogs, setDogs] = useState([]);
 
-	console.log(dogs);
-
 	const handleClick = (todo) => {
 		/**
 		 * Spread in the initial todos
 		 * add the new todo
 		 */
-		setTodos([...todos, todo]);
+		fetch('http://localhost:3000/todos', {
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			method: 'POST',
+			body: JSON.stringify({ name: todo }),
+		})
+			.then((res) => res.json())
+			.then((data) => setTodos([...todos, data]))
+			.catch((err) => console.log(err));
 	};
 
 	useEffect(() => {
-		fetch('https://dog.ceo/api/breeds/image/random/3')
-			.then((res) => res.json())
-			.then((data) => setDogs(data.message))
-			.catch((err) => console.log(err));
+		// fetch('https://dog.ceo/api/breeds/image/random/3')
+		// 	.then((res) => res.json())
+		// 	.then((data) => setDogs(data.message))
+		// 	.catch((err) => console.log(err));
+	}, []);
+
+	useEffect(() => {
+		const fetchTodos = async () => {
+			try {
+				const res = await fetch('http://localhost:3000/todos');
+
+				const data = await res.json();
+
+				console.log(data);
+
+				setTodos(data);
+			} catch (error) {
+				console.log(error);
+			}
+		};
+
+		fetchTodos();
 	}, []);
 
 	return (
@@ -32,9 +57,9 @@ function App() {
 				</div>
 
 				<ol className="mt-2">
-					{todos.map((todo, index) => (
-						<li key={index} className="flex mb-4 items-center">
-							{todo}
+					{todos.map((todo) => (
+						<li key={todo.id} className="flex mb-4 items-center">
+							{todo.name}
 						</li>
 					))}
 				</ol>
