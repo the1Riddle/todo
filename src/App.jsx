@@ -47,6 +47,8 @@ function App() {
 		fetchTodos();
 	}, []);
 
+	// Worked on deleting a todo
+
 	return (
 		<div className="h-screen w-full flex flex-col gap-4 items-center justify-center bg-gray-100">
 			<div className="bg-white rounded shadow p-6">
