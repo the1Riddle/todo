@@ -3,6 +3,7 @@ const ContactPage = () => {
 		<div>
 			<h1>Header</h1>
 			<div>Body</div>
+			<footer>Footer</footer>
 		</div>
 	);
 };
