@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import TodoForm from './components/TodoForm';
 
+const BASE_URL = "https://my-json-server.typicode.com/NellieMK65/todo/todos"
+
 function App() {
 	const [todos, setTodos] = useState([]);
 	const [dogs, setDogs] = useState([]);
@@ -10,7 +12,7 @@ function App() {
 		 * Spread in the initial todos
 		 * add the new todo
 		 */
-		fetch('http://localhost:3000/todos', {
+		fetch(BASE_URL, {
 			headers: {
 				'Content-Type': 'application/json',
 			},
@@ -32,7 +34,7 @@ function App() {
 	useEffect(() => {
 		const fetchTodos = async () => {
 			try {
-				const res = await fetch('http://localhost:3000/todos');
+				const res = await fetch(BASE_URL);
 
 				const data = await res.json();
 
