@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import TodoForm from './components/TodoForm';
-
+import TodoList from './components/TodoList';
+import LoadingIndicator from './components/LoadingIndicator';
 
 const BASE_URL = "https://my-json-server.typicode.com/NellieMK65/todo/todos";
 
