@@ -74,6 +74,8 @@ function App() {
         todo.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+    
+
     return (
         <div className={`h-screen w-full flex flex-col gap-4 items-center justify-center ${darkMode ? 'bg-black text-white' : 'bg-gray-100 text-black'}`}>
             <div className={`container rounded shadow p-6 ${darkMode ? 'bg-black text-white' : 'bg-white text-black'}`}>
