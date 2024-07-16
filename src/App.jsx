@@ -13,6 +13,7 @@ function App() {
     const [loading, setLoading] = useState(false);
     const [darkMode, setDarkMode] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
+    const [sortType, setSortType] = useState('date'); // Default sort by date
 
     const handleClick = (todo) => {
         if (todo.trim() === '') {
@@ -53,6 +54,10 @@ function App() {
         setSearchQuery(query);
     };
 
+    const handleSort = (type) => {
+        setSortType(type);
+    };
+
     useEffect(() => {
         const fetchTodos = async () => {
             setLoading(true);
@@ -74,7 +79,19 @@ function App() {
         todo.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    
+    // Sorting functionality
+    const sortedTodos = [...filteredTodos].sort((a, b) => {
+        switch (sortType) {
+            case 'date':
+                return new Date(a.createdAt) - new Date(b.createdAt);
+            case 'priority':
+                return a.priority - b.priority;
+            case 'completed':
+                return a.completed ? -1 : 1;
+            default:
+                return 0;
+        }
+    });
 
     return (
         <div className={`h-screen w-full flex flex-col gap-4 items-center justify-center ${darkMode ? 'bg-black text-white' : 'bg-gray-100 text-black'}`}>
@@ -82,12 +99,20 @@ function App() {
                 <h1 className="text-3xl">Todo List</h1>
                 <ToggleThemeButton darkMode={darkMode} setDarkMode={setDarkMode} />
                 <SearchBar handleSearch={handleSearch} />
+                <div className="flex justify-between items-center mt-4">
+                    <span className="text-lg">Sort by:</span>
+                    <div>
+                        <button className={`mx-2 ${sortType === 'date' ? 'font-bold' : ''}`} onClick={() => handleSort('date')}>Date</button>
+                        <button className={`mx-2 ${sortType === 'priority' ? 'font-bold' : ''}`} onClick={() => handleSort('priority')}>Priority</button>
+                        <button className={`mx-2 ${sortType === 'completed' ? 'font-bold' : ''}`} onClick={() => handleSort('completed')}>Completed</button>
+                    </div>
+                </div>
                 {loading ? <LoadingIndicator /> : (
                     <>
                         <div className="flex mt-4 gap-2">
                             <TodoForm handleClick={handleClick} />
                         </div>
-                        <TodoList todos={filteredTodos} handleComplete={handleComplete} handleDelete={handleDelete} />
+                        <TodoList todos={sortedTodos} handleComplete={handleComplete} handleDelete={handleDelete} />
                     </>
                 )}
             </div>
