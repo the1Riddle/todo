@@ -1,17 +1,18 @@
 ## Todo Application
+
 Table of Contents
-1. Overview
-2. Features
-3. Project Structure
-4. Installation
-5. Usage
-
-
+1. [Overview](#overview)
+2. [Features](#features)
+3. [Project Structure](#project-structure)
+4. [Installation](#installation)
+5. [Usage](#usage)
 
 ##  Overview
+
 This is a simple Todo Application built with React. The application allows users to manage a list of tasks, including adding, deleting, and marking tasks as complete. Additionally, users can view a random selection of dog images fetched from an external API.
 
 ## Features
+
 1. Add Todos: Users can add new tasks to their todo list.
 2. Delete Todos: Users can delete tasks from their todo list.
 3. Complete Todos: Users can mark tasks as completed.
@@ -24,6 +25,7 @@ This is a simple Todo Application built with React. The application allows users
 
 ## Project Structure
 
+```
 todo-app/
 │
 ├── public/
@@ -41,24 +43,33 @@ todo-app/
 ├── .gitignore
 ├── package.json
 └── README.md
+```
 
 ## Installation
+
 Clone the repository:
 
+```bash
 git clone https://github.com/your-username/todo-app.git
+```
 
 Navigate to the project directory:
 
+```bash
 cd todo-app
+```
 
 Install dependencies:
 
+```bash
 npm install
+```
 
 ## Usage
+
 Start the development server:
+```bash
 npm start
+```
 
-Open your browser and visit http://localhost:3000 to see the application in action.
-
-
+Open your browser and visit `http://localhost:3000` to see the application in action.
