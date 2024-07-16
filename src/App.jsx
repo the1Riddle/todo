@@ -1,94 +1,89 @@
 import { useEffect, useState } from 'react';
 import TodoForm from './components/TodoForm';
 
-const BASE_URL = "https://my-json-server.typicode.com/NellieMK65/todo/todos"
+
+const BASE_URL = "https://my-json-server.typicode.com/NellieMK65/todo/todos";
 
 function App() {
-	const [todos, setTodos] = useState([]);
-	const [dogs, setDogs] = useState([]);
+    const [todos, setTodos] = useState([]);
+    const [dogs, setDogs] = useState([]);
+    const [loading, setLoading] = useState(false);
 
-	const handleClick = (todo) => {
-		/**
-		 * Spread in the initial todos
-		 * add the new todo
-		 */
-		fetch(BASE_URL, {
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			method: 'POST',
-			body: JSON.stringify({ name: todo }),
-		})
-			.then((res) => res.json())
-			.then((data) => setTodos([...todos, data]))
-			.catch((err) => console.log(err));
-	};
+    const handleClick = (todo) => {
+        if (todo.trim() === '') {
+            alert('Todo cannot be empty');
+            return;
+        }
 
-	useEffect(() => {
-		// fetch('https://dog.ceo/api/breeds/image/random/3')
-		// 	.then((res) => res.json())
-		// 	.then((data) => setDogs(data.message))
-		// 	.catch((err) => console.log(err));
-	}, []);
+        fetch(BASE_URL, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify({ name: todo }),
+        })
+            .then((res) => res.json())
+            .then((data) => setTodos([...todos, data]))
+            .catch((err) => alert('Failed to add todo'));
+    };
 
-	useEffect(() => {
-		const fetchTodos = async () => {
-			try {
-				const res = await fetch(BASE_URL);
+    const handleDelete = (id) => {
+        fetch(`${BASE_URL}/${id}`, {
+            method: 'DELETE',
+        })
+            .then((res) => res.json())
+            .then(() => setTodos(todos.filter(todo => todo.id !== id)))
+            .catch((err) => console.log(err));
+    };
 
-				const data = await res.json();
+    const handleComplete = (id) => {
+        const updatedTodos = todos.map(todo =>
+            todo.id === id ? { ...todo, completed: !todo.completed } : todo
+        );
 
-				console.log(data);
+        setTodos(updatedTodos);
+    };
 
-				setTodos(data);
-			} catch (error) {
-				console.log(error);
-			}
-		};
+    useEffect(() => {
+        const fetchTodos = async () => {
+            setLoading(true);
+            try {
+                const res = await fetch(BASE_URL);
+                const data = await res.json();
+                setTodos(data);
+            } catch (error) {
+                console.log(error);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-		fetchTodos();
-	}, []);
+        fetchTodos();
+    }, []);
 
-	// Worked on deleting a todo
+    return (
+        <div className="h-screen w-full flex flex-col gap-4 items-center justify-center bg-gray-100">
+            <div className="bg-white rounded shadow p-6">
+                <h1 className="text-3xl">Todo List</h1>
+                {loading ? <LoadingIndicator /> : (
+                    <>
+                        <div className="flex mt-4 gap-2">
+                            <TodoForm handleClick={handleClick} />
+                        </div>
+                        <TodoList todos={todos} handleComplete={handleComplete} handleDelete={handleDelete} />
+                    </>
+                )}
+            </div>
 
-	// Finished working on updating a todo
-
-	// Fixed working on bug
-
-	return (
-		<div className="h-screen w-full flex flex-col gap-4 items-center justify-center bg-gray-100">
-			<div className="bg-white rounded shadow p-6">
-				<h1 className="text-3xl">Todo List</h1>
-
-				<div className="flex mt-4 gap-2">
-					<TodoForm handleClick={handleClick} />
-				</div>
-
-				<ol className="mt-2">
-					{todos.map((todo) => (
-						<li key={todo.id} className="flex mb-4 items-center">
-							{todo.name}
-						</li>
-					))}
-				</ol>
-			</div>
-
-			<div className="grid grid-cols-3 gap-4">
-				{dogs.map((dog, index) => {
-					return (
-						<div key={index} className="h-[200px] w-[250px]">
-							<img
-								src={dog}
-								width="100%"
-								height="100%"
-								// className="min-h-[200]"
-							/>
-						</div>
-					);
-				})}
-			</div>
-		</div>
-	);
+            <div className="grid grid-cols-3 gap-4">
+                {dogs.map((dog, index) => (
+                    <div key={index} className="h-[200px] w-[250px]">
+                        <img src={dog} alt="dog" width="100%" height="100%" />
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
 }
 
 export default App;
