@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import TodoForm from './components/TodoForm';
 import TodoList from './components/TodoList';
 import LoadingIndicator from './components/LoadingIndicator';
+import ToggleThemeButton from './components/ToggleThemeButton';
 
 const BASE_URL = "https://my-json-server.typicode.com/NellieMK65/todo/todos";
 
@@ -9,6 +10,7 @@ function App() {
     const [todos, setTodos] = useState([]);
     const [dogs, setDogs] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [darkMode, setDarkMode] = useState(false);
 
     const handleClick = (todo) => {
         if (todo.trim() === '') {
@@ -63,9 +65,10 @@ function App() {
     }, []);
 
     return (
-        <div className="h-screen w-full flex flex-col gap-4 items-center justify-center bg-gray-100">
-            <div className="bg-white rounded shadow p-6">
+        <div className={`h-screen w-full flex flex-col gap-4 items-center justify-center ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'}`}>
+            <div className={`bg-white rounded shadow p-6 ${darkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
                 <h1 className="text-3xl">Todo List</h1>
+                <ToggleThemeButton darkMode={darkMode} setDarkMode={setDarkMode} />
                 {loading ? <LoadingIndicator /> : (
                     <>
                         <div className="flex mt-4 gap-2">
