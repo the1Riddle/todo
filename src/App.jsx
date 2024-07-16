@@ -3,6 +3,7 @@ import TodoForm from './components/TodoForm';
 import TodoList from './components/TodoList';
 import LoadingIndicator from './components/LoadingIndicator';
 import ToggleThemeButton from './components/ToggleThemeButton';
+import SearchBar from './components/SearchBar';
 
 const BASE_URL = "https://my-json-server.typicode.com/NellieMK65/todo/todos";
 
@@ -11,6 +12,7 @@ function App() {
     const [dogs, setDogs] = useState([]);
     const [loading, setLoading] = useState(false);
     const [darkMode, setDarkMode] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
 
     const handleClick = (todo) => {
         if (todo.trim() === '') {
@@ -47,6 +49,10 @@ function App() {
         setTodos(updatedTodos);
     };
 
+    const handleSearch = (query) => {
+        setSearchQuery(query);
+    };
+
     useEffect(() => {
         const fetchTodos = async () => {
             setLoading(true);
@@ -64,24 +70,29 @@ function App() {
         fetchTodos();
     }, []);
 
+    const filteredTodos = todos.filter(todo =>
+        todo.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     return (
-        <div className={`h-screen w-full flex flex-col gap-4 items-center justify-center ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'}`}>
-            <div className={`bg-white rounded shadow p-6 ${darkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
+        <div className={`h-screen w-full flex flex-col gap-4 items-center justify-center ${darkMode ? 'bg-black text-white' : 'bg-gray-100 text-black'}`}>
+            <div className={`container rounded shadow p-6 ${darkMode ? 'bg-black text-white' : 'bg-white text-black'}`}>
                 <h1 className="text-3xl">Todo List</h1>
                 <ToggleThemeButton darkMode={darkMode} setDarkMode={setDarkMode} />
+                <SearchBar handleSearch={handleSearch} />
                 {loading ? <LoadingIndicator /> : (
                     <>
                         <div className="flex mt-4 gap-2">
                             <TodoForm handleClick={handleClick} />
                         </div>
-                        <TodoList todos={todos} handleComplete={handleComplete} handleDelete={handleDelete} />
+                        <TodoList todos={filteredTodos} handleComplete={handleComplete} handleDelete={handleDelete} />
                     </>
                 )}
             </div>
 
             <div className="grid grid-cols-3 gap-4">
                 {dogs.map((dog, index) => (
-                    <div key={index} className="h-[200px] w-[250px]">
+                    <div key={index} className={`h-[200px] w-[250px] ${darkMode ? 'bg-gray-900 text-white' : ''}`}>
                         <img src={dog} alt="dog" width="100%" height="100%" />
                     </div>
                 ))}
